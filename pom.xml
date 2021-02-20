@@ -47,7 +47,14 @@
 		<dependency>
 		    <groupId>org.flywaydb</groupId>
 		    <artifactId>flyway-core</artifactId>
-		    </dependency>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
+		<dependency>
+		    <groupId>org.projectlombok</groupId>
+		    <artifactId>lombok</artifactId>
+		    <scope>provided</scope>
+		</dependency>
+		
 	</dependencies>
 
 	<build>
