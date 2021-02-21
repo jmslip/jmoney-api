@@ -1,5 +1,7 @@
 package com.jms.jmoneyapi.exceptionhandler;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
@@ -12,13 +14,12 @@ import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
 import com.fasterxml.jackson.databind.exc.UnrecognizedPropertyException;
-
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import com.jms.jmoneyapi.exceptionhandler.dto.JMoneyErrorMessageDTO;
 
 @ControllerAdvice
 public class JMoneyEntityExceptionHandler extends ResponseEntityExceptionHandler {
+
+	private static final Logger LOG = LoggerFactory.getLogger(JMoneyEntityExceptionHandler.class);
 
 	@Autowired
 	private MessageSource messageSource;
@@ -30,15 +31,17 @@ public class JMoneyEntityExceptionHandler extends ResponseEntityExceptionHandler
 		Throwable rootCause = ex.getRootCause();
 
 		if (rootCause instanceof UnrecognizedPropertyException) {
-			MensagemErro exceptionMessage = montaMensagemExcecao(rootCause, status.value());
+			JMoneyErrorMessageDTO exceptionMessage = montaMensagemExcecao(rootCause, status.value());
 
+			LOG.error(ex.getMessage(), ex);
 			return handleExceptionInternal(ex, exceptionMessage, headers, status, request);
 		}
 
+		LOG.error(ex.getMessage(), ex);
 		return super.handleHttpMessageNotReadable(ex, headers, status, request);
 	}
 
-	private MensagemErro montaMensagemExcecao(Throwable rootCause, int statusCode) {
+	private JMoneyErrorMessageDTO montaMensagemExcecao(Throwable rootCause, int statusCode) {
 		StringBuilder exceptionMessage = new StringBuilder();
 
 		exceptionMessage
@@ -46,16 +49,7 @@ public class JMoneyEntityExceptionHandler extends ResponseEntityExceptionHandler
 		exceptionMessage.append(": ");
 		exceptionMessage.append(((UnrecognizedPropertyException) rootCause).getPropertyName());
 
-		return new MensagemErro(exceptionMessage.toString(), statusCode);
-	}
-
-	@Getter
-	@Setter
-	@AllArgsConstructor
-	private class MensagemErro {
-
-		private String errorMessage;
-		private int statusCode;
+		return new JMoneyErrorMessageDTO(exceptionMessage.toString(), statusCode);
 	}
 
 }
