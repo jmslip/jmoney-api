@@ -7,11 +7,11 @@ import javax.persistence.Id;
 import javax.persistence.SequenceGenerator;
 import javax.persistence.Table;
 
+import com.jms.jmoneyapi.domain.utils.Constants;
+
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
-
-import com.jms.jmoneyapi.domain.utils.Constants;
 
 @Getter
 @Setter
@@ -24,6 +24,6 @@ public class Categoria {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = Constants.SQ_CATEGORIA)
 	private Long id;
-	
+
 	private String nome;
 }
