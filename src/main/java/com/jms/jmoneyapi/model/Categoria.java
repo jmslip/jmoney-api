@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Table(name = Constants.TB_CATEGORIA, schema = Constants.SCHEMA_NAME)
 @SequenceGenerator(name = Constants.SQ_CATEGORIA, sequenceName = Constants.SQ_CATEGORIA, allocationSize = 1, schema = Constants.SCHEMA_NAME)
-public class Categoria {
+public class Categoria implements IEntity<Long> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE, generator = Constants.SQ_CATEGORIA)

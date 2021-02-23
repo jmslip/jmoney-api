@@ -14,15 +14,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import com.jms.jmoneyapi.domain.utils.Constants;
 import com.jms.jmoneyapi.model.Categoria;
 import com.jms.jmoneyapi.model.dto.CategoriaDTO;
 import com.jms.jmoneyapi.repository.CategoriaRepository;
 
 @RestController
 @RequestMapping("/categorias")
-public class CategoriaResource {
+public class CategoriaResource extends EntityGenericResource<Long> {
 
 	@Autowired
 	private CategoriaRepository categoriaRepository;
@@ -39,8 +39,7 @@ public class CategoriaResource {
 
 		Categoria categoriaPersistida = categoriaRepository.save(categoria);
 
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequestUri().path("/{id}")
-				.buildAndExpand(categoriaPersistida.getId()).toUri();
+		URI uri = getUri(categoriaPersistida, Constants.PATH_ID);
 
 		return ResponseEntity.created(uri).body(categoriaPersistida);
 	}
